@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="contain">
+        <div class="questionBox">
+            <img src="./img/question.png" alt="" srcset="">
+            <div id="question"></div>
+
+        </div>
+        <div class="answerBox">
+            <img src="./img/answer.png" alt="" srcset="">
+            <div class="content">
+                <div>
+                    <span id="answer"></span><span id="baseAnswer"></span>
+                </div>
+            </div>
+            <div class="iconBox">
+                <!-- <img class="iconR" src="./img/right.png" alt="" srcset=""> -->
+                <img class="icon" src="" alt="" srcset="">
+            </div>
+        </div>
+    </div>
+    <script>
+        const params = {};
+        !(function getData() {
+            const search = new URLSearchParams(window.location.search);
+            for (const [key, value] of search) {
+                params[key] = value
+            }
+        })()
+
+        const question = document.querySelector("#question")
+        const answer = document.querySelector("#answer")
+        const baseAnswer = document.querySelector("#baseAnswer")
+        const icon = document.querySelector(".icon")
+        question.innerHTML = params.q
+        baseAnswer.innerHTML = params.ba
+
+        showAnswer()
+        function showAnswer() {
+            const a = params.a
+            const ba = params.ba
+            let nowAnswer = ""
+            let i = 0;
+            let bingo = true
+            const interval = setInterval(() => {
+                if (i < a.length || i < ba.length) {
+                    if (a[i] === ba[i]) {
+                        nowAnswer += a.substring(i, i + 1)
+                    } else {
+                        nowAnswer += `<span class="red">${a.substring(i, i + 1)}</span>`
+                        bingo = false
+                    }
+                    answer.innerHTML = nowAnswer
+                    baseAnswer.innerHTML = ba.substring(i + 1, ba.length)
+                    i++
+                } else {
+                    clearInterval(interval)
+                    icon.src = bingo ? "./img/right.png" : "./img/wrong.png"
+                }
+            }, 100);
+        }
+    </script>
+</body>
+
+</html>
